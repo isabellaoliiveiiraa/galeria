@@ -3,22 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Galeria Interativa{% endblock %}</title>
+    <title>{% block title %}Galeria de Fotos{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
+
     <nav class="bg-white shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="{% url 'galeria:lista_fotos' %}" class="text-2xl font-bold text-gray-900 hover:text-blue-600 transition duration-300">Galeria de Fotos</a>
+            <a href="{% url 'galeria:lista_fotos' %}" class="text-2xl font-bold text-gray-900 hover:text-blue-600 transition duration-300">
+                Galeria de Fotos
+            </a>
+            
+            <div class="flex space-x-6 items-center">
+                <a href="{% url 'galeria:sobre_nos' %}" class="text-gray-600 hover:text-blue-600 transition">Sobre Nós</a>
+                <a href="{% url 'galeria:contato' %}" class="text-gray-600 hover:text-blue-600 transition">Contato</a>
+            </div>
         </div>
     </nav>
+
     <main class="container mx-auto px-6 py-8">
+
+        {% if messages %}
+            <div class="mb-6"> {% for message in messages %}
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative text-center" role="alert">
+                        <strong class="font-bold">Sucesso!</strong>
+                        <span class="block sm:inline">{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
+
     <footer class="bg-white mt-8 py-4">
         <div class="container mx-auto px-6 text-center text-gray-600">
-            <p>&copy; 2025 - Minha Galeria</p>
+            <p>© 2025 - Minha Galeria Incrível</p>
         </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

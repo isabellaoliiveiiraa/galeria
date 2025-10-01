@@ -1,0 +1,63 @@
+{% extends "home.html" %}
+
+{% block title %}Contato{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-xl p-8 md:p-12 max-w-4xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6">
+        Fale Conosco
+    </h1>
+
+    <a href="{% url 'galeria:lista_fotos' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        Voltar para a Home
+    </a>
+
+    <div class="space-y-8 text-gray-700 leading-relaxed border-t pt-8">
+        <p class="text-lg">
+            Adoraríamos ouvir você! Seja para tirar dúvidas, dar sugestões ou simplesmente dizer um "olá", sua mensagem é muito bem-vinda.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Nosso Endereço</h3>
+                    <p>Avenida Principal, 123<br>São Paulo, SP - Brasil</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">E-mail</h3>
+                    <p class="text-blue-600 hover:underline">contato@minhagaleria.com</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Telefone</h3>
+                    <p>(11) 98765-4321</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Envie uma Mensagem</h3>
+               <form action="{% url 'galeria:contato' %}" method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label for="name" class="block font-medium">Nome</label>
+                        <input type="text" id="name" name="name" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="email" class="block font-medium">E-mail</label>
+                        <input type="email" id="email" name="email" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="message" class="block font-medium">Sua Mensagem</label>
+                        <textarea id="message" name="message" rows="4" class="w-full mt-1 p-2 border border-gray-300 rounded-md"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                        Enviar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
