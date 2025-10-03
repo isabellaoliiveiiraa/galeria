@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.contrib import messages  # <-- IMPORT ADICIONADO
+from django.contrib import messages
 from django.db.models import Q
+from django.core.mail import send_mail
 from .models import Foto
 
 class GaleriaView(ListView):
@@ -47,25 +48,38 @@ class PaginaPesquisaView(ListView):
 class SobreNosView(TemplateView):
     template_name = 'galeria/sobre_nos.html'
 
-# <-- VERSÃO CORRETA E ÚNICA DA VIEW DE CONTATO -->
+
 class ContatoView(View):
     def get(self, request):
-        """Este método é chamado quando o usuário apenas visita a página."""
         return render(request, 'galeria/contato.html')
 
     def post(self, request):
-        """Este método é chamado quando o usuário envia o formulário."""
-        # Pega os dados do formulário
         nome = request.POST.get('name')
         email = request.POST.get('email')
         mensagem = request.POST.get('message')
 
-        # Você pode usar os dados aqui (enviar email, salvar no banco, etc.)
-        # Por enquanto, apenas imprimimos no console para confirmar o recebimento
-        print(f"Nova mensagem recebida de: {nome} ({email})")
+        # Etapa 1: Armazenar o contacto (continua igual)
+        dados_contato = f"{nome},{email},'{mensagem.replace(',',';')}'\n"
+        with open("contatos_recebidos.csv", "a", encoding='utf-8') as arquivo:
+            arquivo.write(dados_contato)
 
-        # Adiciona uma mensagem de sucesso para ser exibida na próxima página
-        messages.success(request, 'Sua mensagem foi enviada com sucesso!')
+        # Etapa 2: Enviar o e-mail usando a função do Django
+        try:
+            assunto = "Recebemos a sua mensagem!"
+            corpo_email = f"Olá {nome},\n\nObrigado por entrar em contacto. A sua mensagem foi recebida e responderemos em breve.\n\nAtenciosamente,\nA Sua Galeria"
+            
+            send_mail(
+                assunto,
+                corpo_email,
+                'nao-responda@suagaleria.com',  # E-mail remetente
+                [email],                       # Lista de destinatários
+                fail_silently=False,
+            )
+        except Exception as e:
+            messages.error(request, 'Ocorreu um erro ao processar a sua mensagem.')
+            print(f"Erro ao enviar e-mail: {e}")
+            return render(request, 'galeria/contato.html')
 
-        # Redireciona o usuário para a página inicial
+        # Etapa 3: Redirecionar para a página principal da galeria
+        messages.success(request, 'A sua mensagem foi enviada com sucesso!')
         return redirect('galeria:lista_fotos')
