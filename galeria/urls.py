@@ -5,8 +5,8 @@ from .views import (
     FotoDetailView,
     PaginaPesquisaView,
     SobreNosView,
-    ContatoView,
-    SucessoView
+    ContatoView
+    # SucessoView foi removida daqui
 )
 
 app_name = 'galeria'
@@ -17,5 +17,5 @@ urlpatterns = [
     path('pesquisar/', PaginaPesquisaView.as_view(), name='pagina_pesquisa'),
     path('sobre/', SobreNosView.as_view(), name='sobre_nos'),
     path('contato/', ContatoView.as_view(), name='contato'),
-    path('contato/sucesso/', SucessoView.as_view(), name='sucesso'),
+    # A linha para 'contato/sucesso/' foi removida
 ]

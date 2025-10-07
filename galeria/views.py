@@ -58,12 +58,19 @@ class ContatoView(View):
         email = request.POST.get('email')
         mensagem = request.POST.get('message')
 
-        # Etapa 1: Armazenar o contacto (continua igual)
+       
+        print("\n--- NOVA MENSAGEM RECEBIDA ---")
+        print(f"Nome: {nome}")
+        print(f"E-mail: {email}")
+        print(f"Mensagem: {mensagem}")
+        print("--------------------------------\n")
+      
+        
         dados_contato = f"{nome},{email},'{mensagem.replace(',',';')}'\n"
         with open("contatos_recebidos.csv", "a", encoding='utf-8') as arquivo:
             arquivo.write(dados_contato)
 
-        # Etapa 2: Enviar o e-mail usando a função do Django
+        
         try:
             assunto = "Recebemos a sua mensagem!"
             corpo_email = f"Olá {nome},\n\nObrigado por entrar em contacto. A sua mensagem foi recebida e responderemos em breve.\n\nAtenciosamente,\nA Sua Galeria"
@@ -71,8 +78,8 @@ class ContatoView(View):
             send_mail(
                 assunto,
                 corpo_email,
-                'nao-responda@suagaleria.com',  # E-mail remetente
-                [email],                       # Lista de destinatários
+                'nao-responda@suagaleria.com',
+                [email],
                 fail_silently=False,
             )
         except Exception as e:
@@ -80,6 +87,7 @@ class ContatoView(View):
             print(f"Erro ao enviar e-mail: {e}")
             return render(request, 'galeria/contato.html')
 
-        # Etapa 3: Redirecionar para a página principal da galeria
+       
         messages.success(request, 'A sua mensagem foi enviada com sucesso!')
         return redirect('galeria:lista_fotos')
+
